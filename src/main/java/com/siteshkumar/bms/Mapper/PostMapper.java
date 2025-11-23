@@ -1,17 +1,17 @@
 package com.siteshkumar.bms.Mapper;
 
-import com.siteshkumar.bms.DTO.PostDTO;
+import com.siteshkumar.bms.DTO.PostResponse;
 import com.siteshkumar.bms.Entity.PostEntity;
 
 public class PostMapper {
     
-    public static PostDTO entityToDto(PostEntity entity){
+    public static PostResponse entityToDto(PostEntity entity){
         if(entity == null)
             return null;
 
         Long authorId = entity.getAuthor().getUserId();
 
-        PostDTO dto = new PostDTO();
+        PostResponse dto = new PostResponse();
         dto.setPostId(entity.getPostId());
         dto.setTitle(entity.getTitle());
         dto.setContent(entity.getContent());

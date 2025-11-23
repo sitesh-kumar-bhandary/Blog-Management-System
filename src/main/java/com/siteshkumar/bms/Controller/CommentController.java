@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.siteshkumar.bms.DTO.CommentDTO;
-import com.siteshkumar.bms.DTO.CreateCommentDTO;
+import com.siteshkumar.bms.DTO.CommentResponse;
+import com.siteshkumar.bms.DTO.CommentRequest;
 import com.siteshkumar.bms.Service.CommentService;
 import jakarta.validation.Valid;
 
@@ -25,14 +25,14 @@ public class CommentController {
     }
 
     @PostMapping("/add/{postId}")
-    public ResponseEntity<CommentDTO> addCommentInPost(@PathVariable Long postId, @Valid @RequestBody CreateCommentDTO dto){
-        CommentDTO comment = commentService.addCommentInPost(postId, dto);
+    public ResponseEntity<CommentResponse> addCommentInPost(@PathVariable Long postId, @Valid @RequestBody CommentRequest dto){
+        CommentResponse comment = commentService.addCommentInPost(postId, dto);
         return ResponseEntity.status(201).body(comment);
     }
 
     @GetMapping("/all/{postId}")
-    public ResponseEntity<List<CommentDTO>> getAllCommentsOfAPosts(@PathVariable Long postId){
-        List<CommentDTO> comments = commentService.getAllCommentsOfAPosts(postId);
+    public ResponseEntity<List<CommentResponse>> getAllCommentsOfAPosts(@PathVariable Long postId){
+        List<CommentResponse> comments = commentService.getAllCommentsOfAPosts(postId);
         return ResponseEntity.ok(comments);
     }
 

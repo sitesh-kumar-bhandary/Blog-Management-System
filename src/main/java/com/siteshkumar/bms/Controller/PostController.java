@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.siteshkumar.bms.DTO.CreatePostDTO;
-import com.siteshkumar.bms.DTO.PostDTO;
-import com.siteshkumar.bms.DTO.UpdatePostDTO;
+import com.siteshkumar.bms.DTO.PostRequest;
+import com.siteshkumar.bms.DTO.PostResponse;
+import com.siteshkumar.bms.DTO.PostUpdateRequest;
 import com.siteshkumar.bms.Service.PostService;
 import jakarta.validation.Valid;
 
@@ -27,14 +27,14 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody CreatePostDTO dto){
-        PostDTO createdPost = postService.createPost(dto);
+    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest dto){
+        PostResponse createdPost = postService.createPost(dto);
         return ResponseEntity.status(201).body(createdPost);
     }
 
     @PutMapping("/update/{postId}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostDTO dto){
-        PostDTO updatedPost = postService.updatePost(postId, dto);
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long postId, @Valid @RequestBody PostUpdateRequest dto){
+        PostResponse updatedPost = postService.updatePost(postId, dto);
         return ResponseEntity.status(200).body(updatedPost);
     }
 
@@ -45,14 +45,14 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostDTO>> getAllPosts(){
-        List<PostDTO> posts = postService.getAllPosts();
+    public ResponseEntity<List<PostResponse>> getAllPosts(){
+        List<PostResponse> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDTO> getPostById(@PathVariable Long postId){
-        PostDTO foundPost = postService.getPostById(postId);
+    public ResponseEntity<PostResponse> getPostById(@PathVariable Long postId){
+        PostResponse foundPost = postService.getPostById(postId);
         return ResponseEntity.ok(foundPost);
     }
 }

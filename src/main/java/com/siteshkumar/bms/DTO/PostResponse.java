@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDTO {
+public class PostResponse {
     
-    private Long commentId;
-    private String text;
-    private LocalDateTime createdAt;
-    private Long authorId;
     private Long postId;
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Long authorId;
 }

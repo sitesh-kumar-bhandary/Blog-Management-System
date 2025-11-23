@@ -9,14 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePostDTO {
+public class CommentRequest {
     
-    @NotBlank(message = "title is required")
-    private String title;
+    @NotBlank(message="text is required")
+    private String text;
 
-    @NotBlank(message = "content is required")
-    private String content;
-
-    @NotNull(message = "user id is required")
+    @NotNull(message="user id is required")
     private Long userId;
 }

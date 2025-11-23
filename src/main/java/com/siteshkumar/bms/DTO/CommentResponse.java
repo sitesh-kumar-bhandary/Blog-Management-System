@@ -1,7 +1,6 @@
 package com.siteshkumar.bms.DTO;
 
 import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
+public class CommentResponse {
     
-    private Long postId;
-    private String title;
-    private String content;
+    private Long commentId;
+    private String text;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private Long authorId;
+    private Long postId;
 }

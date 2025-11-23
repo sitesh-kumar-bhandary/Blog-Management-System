@@ -1,15 +1,15 @@
 package com.siteshkumar.bms.Mapper;
 
-import com.siteshkumar.bms.DTO.CommentDTO;
+import com.siteshkumar.bms.DTO.CommentResponse;
 import com.siteshkumar.bms.Entity.CommentEntity;
 
 public class CommentMapper {
     
-    public static CommentDTO entityToDto(CommentEntity entity){
+    public static CommentResponse entityToDto(CommentEntity entity){
         if(entity == null)
             return null;
             
-        return new CommentDTO(
+        return new CommentResponse(
             entity.getCommentId(),
             entity.getText(),
             entity.getCreatedAt(),

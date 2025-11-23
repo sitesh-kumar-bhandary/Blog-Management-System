@@ -1,15 +1,15 @@
 package com.siteshkumar.bms.Service;
 
 import java.util.List;
-import com.siteshkumar.bms.DTO.CreatePostDTO;
-import com.siteshkumar.bms.DTO.PostDTO;
-import com.siteshkumar.bms.DTO.UpdatePostDTO;
+import com.siteshkumar.bms.DTO.PostRequest;
+import com.siteshkumar.bms.DTO.PostResponse;
+import com.siteshkumar.bms.DTO.PostUpdateRequest;
 
 public interface PostService {
 
-    public PostDTO createPost(CreatePostDTO dto);
-    public PostDTO updatePost(Long postId, UpdatePostDTO dto);
+    public PostResponse createPost(PostRequest dto);
+    public PostResponse updatePost(Long postId, PostUpdateRequest dto);
     public void deletePost(Long postId);
-    public List<PostDTO> getAllPosts();
-    public PostDTO getPostById(Long postId);
+    public List<PostResponse> getAllPosts();
+    public PostResponse getPostById(Long postId);
 }

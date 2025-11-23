@@ -3,9 +3,9 @@ package com.siteshkumar.bms.Service.Impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import com.siteshkumar.bms.DTO.CreatePostDTO;
-import com.siteshkumar.bms.DTO.PostDTO;
-import com.siteshkumar.bms.DTO.UpdatePostDTO;
+import com.siteshkumar.bms.DTO.PostRequest;
+import com.siteshkumar.bms.DTO.PostResponse;
+import com.siteshkumar.bms.DTO.PostUpdateRequest;
 import com.siteshkumar.bms.Entity.PostEntity;
 import com.siteshkumar.bms.Entity.UserEntity;
 import com.siteshkumar.bms.Mapper.PostMapper;
@@ -25,7 +25,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public PostDTO createPost(CreatePostDTO dto){
+    public PostResponse createPost(PostRequest dto){
         UserEntity user = userRepository.findById(dto.getUserId())
                         .orElseThrow(() -> new RuntimeException("User not found!!!"));
 
@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public PostDTO updatePost(Long postId, UpdatePostDTO dto){
+    public PostResponse updatePost(Long postId, PostUpdateRequest dto){
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException(" Post not found!!! "));
 
@@ -67,15 +67,15 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostDTO> getAllPosts(){
+    public List<PostResponse> getAllPosts(){
         List<PostEntity> postEntities = postRepository.findAll();
 
-        List<PostDTO> posts = postEntities.stream().map(PostMapper::entityToDto).toList();
+        List<PostResponse> posts = postEntities.stream().map(PostMapper::entityToDto).toList();
         return posts;
     }
 
     @Override
-    public PostDTO getPostById(Long postId){
+    public PostResponse getPostById(Long postId){
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException("Post not found!!!"));
 
