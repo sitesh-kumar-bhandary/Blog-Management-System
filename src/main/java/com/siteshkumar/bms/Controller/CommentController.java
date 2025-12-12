@@ -15,7 +15,7 @@ import com.siteshkumar.bms.Service.CommentService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/posts/comments")
+@RequestMapping("/posts/comments")
 public class CommentController {
     
     private final CommentService commentService;
@@ -24,13 +24,13 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/add/{postId}")
+    @PostMapping("/public/add/{postId}")
     public ResponseEntity<CommentResponse> addCommentInPost(@PathVariable Long postId, @Valid @RequestBody CommentRequest dto){
         CommentResponse comment = commentService.addCommentInPost(postId, dto);
         return ResponseEntity.status(201).body(comment);
     }
 
-    @GetMapping("/all/{postId}")
+    @GetMapping("/public/all/{postId}")
     public ResponseEntity<List<CommentResponse>> getAllCommentsOfAPosts(@PathVariable Long postId){
         List<CommentResponse> comments = commentService.getAllCommentsOfAPosts(postId);
         return ResponseEntity.ok(comments);

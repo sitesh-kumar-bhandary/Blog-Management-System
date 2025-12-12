@@ -17,7 +17,7 @@ import com.siteshkumar.bms.Service.PostService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/posts")
 public class PostController {
     
     private final PostService postService;
@@ -44,13 +44,13 @@ public class PostController {
         return ResponseEntity.ok("Post deleted successfully!!!");
     }
 
-    @GetMapping("/all")
+    @GetMapping("/public/all")
     public ResponseEntity<List<PostResponse>> getAllPosts(){
         List<PostResponse> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/public/{postId}")
     public ResponseEntity<PostResponse> getPostById(@PathVariable Long postId){
         PostResponse foundPost = postService.getPostById(postId);
         return ResponseEntity.ok(foundPost);
