@@ -1,7 +1,6 @@
 package com.siteshkumar.bms.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,4 @@ public class PostRequest {
 
     @NotBlank(message = "content is required")
     private String content;
-
-    @NotNull(message = "user id is required")
-    private Long userId;
 }

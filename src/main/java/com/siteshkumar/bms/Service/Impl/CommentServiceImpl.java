@@ -2,6 +2,7 @@ package com.siteshkumar.bms.Service.Impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import com.siteshkumar.bms.DTO.CommentResponse;
 import com.siteshkumar.bms.DTO.CommentRequest;
@@ -12,28 +13,29 @@ import com.siteshkumar.bms.Mapper.CommentMapper;
 import com.siteshkumar.bms.Repository.CommentRepository;
 import com.siteshkumar.bms.Repository.PostRepository;
 import com.siteshkumar.bms.Repository.UserRepository;
+import com.siteshkumar.bms.Security.AuthUtils;
+import com.siteshkumar.bms.Security.CustomUserDetails;
 import com.siteshkumar.bms.Service.CommentService;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService{
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-
-    public CommentServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository){
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-    }
+    private final AuthUtils authUtils;
     
     @Override
     public CommentResponse addCommentInPost(Long postId, CommentRequest dto){
+        CustomUserDetails currentUser = authUtils.getCurrentLoggedInUser();
+
+        UserEntity user = userRepository.findById(currentUser.getId())
+                        .orElseThrow(() -> new RuntimeException("User not found!!!"));
+
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException("Post not found!!!"));
-
-        UserEntity user = userRepository.findById(dto.getUserId())
-                        .orElseThrow(() -> new RuntimeException("User not found!!!"));
 
         CommentEntity comment = new CommentEntity();
         comment.setText(dto.getText());
@@ -60,6 +62,15 @@ public class CommentServiceImpl implements CommentService{
     public void deleteCommentOfAPost(Long commentId){
         CommentEntity existingComment = commentRepository.findById(commentId)
                                     .orElseThrow(() -> new RuntimeException("Comment not found!!!"));
+
+                                            CustomUserDetails currentUser = authUtils.getCurrentLoggedInUser();
+        boolean isOwner = existingComment.getAuthor().getUserId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getAuthorities()
+                                    .stream()
+                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isOwner && !isAdmin)
+            throw new AccessDeniedException("You are not allowed to delete this comment");
 
         commentRepository.delete(existingComment);
     }

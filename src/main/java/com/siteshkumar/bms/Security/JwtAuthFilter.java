@@ -37,11 +37,12 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            // Verification is missing here
+            // Verification
+            if(authUtils.isTokenValid(token, userDetails)){
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
         filterChain.doFilter(request, response);
     }
