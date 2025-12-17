@@ -15,9 +15,13 @@ import com.siteshkumar.bms.DTO.PostRequest;
 import com.siteshkumar.bms.DTO.PostResponse;
 import com.siteshkumar.bms.DTO.PostUpdateRequest;
 import com.siteshkumar.bms.Service.PostService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Post APIs", description = "Create, update, delete and fetch posts")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -25,6 +29,7 @@ public class PostController {
     
     private final PostService postService;
 
+    @Operation(summary = "Create a new post", description = "Only authenticated users can create posts")
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest dto){
@@ -48,6 +53,7 @@ public class PostController {
         return ResponseEntity.ok("Post deleted successfully!!!");
     }
 
+    @Operation(summary = "Get all public posts")
     @GetMapping("/public/all")
     public ResponseEntity<List<PostResponse>> getAllPosts(){
         List<PostResponse> posts = postService.getAllPosts();
