@@ -12,8 +12,10 @@ import com.siteshkumar.bms.DTO.SignupResponseDto;
 import com.siteshkumar.bms.Entity.UserEntity;
 import com.siteshkumar.bms.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthService {
 
@@ -23,6 +25,7 @@ public class AuthService {
     private final AuthUtils authUtils;
 
     public SignupResponseDto signup(SignupRequestDto signupRequestDto){
+        log.info("Signing up for a new user");
         UserEntity user = userRepository.findByEmail(signupRequestDto.getEmail())
                             .orElse(null);
 
@@ -39,6 +42,8 @@ public class AuthService {
             .build()
         );
 
+        log.info("New user registered successfully!!!");
+
         return new SignupResponseDto(
             user.getUserId(),
             user.getUsername(),
@@ -47,7 +52,8 @@ public class AuthService {
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto){
-
+        
+        log.info("User is trying to log-in");
         // First validate whether that user have account or not
         Authentication auth = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -59,6 +65,8 @@ public class AuthService {
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
 
         String token = authUtils.generateAccessToken(user);
+
+        log.info("User logged in successfully");
 
         return new LoginResponseDto(
             user.getId(),

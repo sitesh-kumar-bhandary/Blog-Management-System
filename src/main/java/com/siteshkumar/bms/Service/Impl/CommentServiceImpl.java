@@ -33,6 +33,8 @@ public class CommentServiceImpl implements CommentService{
     
     @Override
     public CommentResponse addCommentInPost(Long postId, CommentRequest dto){
+        log.info("Adding comment in a post with postid: {}", postId);
+
         CustomUserDetails currentUser = authUtils.getCurrentLoggedInUser();
 
         UserEntity user = userRepository.findById(currentUser.getId())
@@ -49,6 +51,8 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.save(comment);
 
+        log.info("Comment added successfully on a post with postId: {}", postId);
+
         // Send email to post creater
         emailService.sendEmail(
                             post.getAuthor().getEmail(), 
@@ -61,16 +65,22 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public List<CommentResponse> getAllCommentsOfAPosts(Long postId){
+        log.info("Fetching all comments on a post: {}", postId);
+
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException("Post not found!!!"));
 
         List<CommentEntity> comments = post.getComments();
+
+        log.info("Fetched {} comments of a post: {}", comments.size(), postId);
 
         return comments.stream().map(CommentMapper::entityToDto).toList();
     }
 
     @Override
     public void deleteCommentOfAPost(Long commentId){
+        log.info("Deleting comment with id: ", commentId);
+
         CommentEntity existingComment = commentRepository.findById(commentId)
                                     .orElseThrow(() -> new RuntimeException("Comment not found!!!"));
 
@@ -84,7 +94,7 @@ public class CommentServiceImpl implements CommentService{
             throw new AccessDeniedException("You are not allowed to delete this comment");
 
         commentRepository.delete(existingComment);
+
+        log.info("Comment deleted Successfully!!!");
     }
-
-
 }
