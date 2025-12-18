@@ -16,9 +16,12 @@ import com.siteshkumar.bms.Repository.UserRepository;
 import com.siteshkumar.bms.Security.AuthUtils;
 import com.siteshkumar.bms.Security.CustomUserDetails;
 import com.siteshkumar.bms.Service.CommentService;
+import com.siteshkumar.bms.Service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService{
 
@@ -26,6 +29,7 @@ public class CommentServiceImpl implements CommentService{
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final AuthUtils authUtils;
+    private final EmailService emailService;
     
     @Override
     public CommentResponse addCommentInPost(Long postId, CommentRequest dto){
@@ -44,6 +48,13 @@ public class CommentServiceImpl implements CommentService{
         comment.setPost(post);
 
         commentRepository.save(comment);
+
+        // Send email to post creater
+        emailService.sendEmail(
+                            post.getAuthor().getEmail(), 
+                            "New comment on your post: "+post.getTitle(),
+                            "Original Post: "+post.getContent() + "\nComment: "+comment.getText() + "\nCommented by: " + currentUser.getEmail()
+                        );
 
         return CommentMapper.entityToDto(comment);
     }
@@ -74,4 +85,6 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.delete(existingComment);
     }
+
+
 }

@@ -40,8 +40,6 @@ public class PostController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/update/{postId}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable Long postId, @Valid @RequestBody PostUpdateRequest dto){
-        // System.out.println("CONTROLLER HIT");
-        // System.out.println("***********************************");
         PostResponse updatedPost = postService.updatePost(postId, dto);
         return ResponseEntity.status(200).body(updatedPost);
     }

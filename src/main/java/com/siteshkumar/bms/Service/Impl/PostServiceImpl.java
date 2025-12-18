@@ -16,8 +16,10 @@ import com.siteshkumar.bms.Security.AuthUtils;
 import com.siteshkumar.bms.Security.CustomUserDetails;
 import com.siteshkumar.bms.Service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
     
@@ -27,6 +29,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostResponse createPost(PostRequest dto){
+        log.info("Creating post with title: {}", dto.getTitle());
+
         CustomUserDetails currentUser = authUtils.getCurrentLoggedInUser();
 
         UserEntity user = userRepository.findById(currentUser.getId())
@@ -41,23 +45,26 @@ public class PostServiceImpl implements PostService{
         post.setAuthor(user);
 
         PostEntity saved = postRepository.save(post);
+
+        log.info("Post created successfully");
+
         return PostMapper.entityToDto(saved);
     }
 
     @Override
     public PostResponse updatePost(Long postId, PostUpdateRequest dto){
+        log.info("Updating post...");
+
         PostEntity post = postRepository.findById(postId)
-                        .orElseThrow(() -> new RuntimeException(" Post not found!!! "));
+                        .orElseThrow(() -> new RuntimeException(" Post not found!!!"));
 
         CustomUserDetails currentUser = authUtils.getCurrentLoggedInUser();
-
-        // System.out.println("POST OWNER = " + post.getAuthor().getUserId());
-        // System.out.println("CURRENT USER = " + currentUser.getId());
-        // System.out.println("***********************************************");
         
-        if(! post.getAuthor().getUserId().equals(currentUser.getId()))
+        if(! post.getAuthor().getUserId().equals(currentUser.getId())) {
+            log.warn("Unauthorized update attempt by userId={} on postId={}", currentUser.getId(), postId);
             throw new AccessDeniedException("You are not allowed to update this post");
-
+        }
+            
         if(dto.getContent() != null && !dto.getContent().isBlank())
             post.setContent(dto.getContent());
 
@@ -67,11 +74,16 @@ public class PostServiceImpl implements PostService{
         post.setUpdatedAt(LocalDateTime.now());
 
         PostEntity saved = postRepository.save(post);
+
+        log.info("Post updated successfully");
+
         return PostMapper.entityToDto(saved);
     }
 
     @Override
     public void deletePost(Long postId){
+        log.info("Deleting post with id: {}", postId);
+
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException("Post not found!!!"));
 
@@ -85,20 +97,31 @@ public class PostServiceImpl implements PostService{
             throw new AccessDeniedException("You are not allowed to delete this post");
 
         postRepository.delete(post);
+
+        log.info("Post deleted successfully");
     }
 
     @Override
     public List<PostResponse> getAllPosts(){
+        log.info("Fetching all the posts...");
+
         List<PostEntity> postEntities = postRepository.findAll();
 
         List<PostResponse> posts = postEntities.stream().map(PostMapper::entityToDto).toList();
+
+        log.info("Fetched {} posts from database", posts.size());
+
         return posts;
     }
 
     @Override
     public PostResponse getPostById(Long postId){
+        log.info("Fetching post by given id: {}", postId);
+
         PostEntity post = postRepository.findById(postId)
                         .orElseThrow(() -> new RuntimeException("Post not found!!!"));
+
+        log.info("This is the post of the given id");
 
         return PostMapper.entityToDto(post);
     }
