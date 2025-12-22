@@ -8,14 +8,14 @@ import com.siteshkumar.bms.Entity.UserEntity;
 import lombok.Getter;
 
 @Getter
-public class CustomUserDetails implements UserDetails{
+public class CustomUserDetails implements UserDetails {
 
     private final Long id;
     private final String email;
     private final String password;
     private final List<GrantedAuthority> authorities;
 
-    public CustomUserDetails(UserEntity user){
+    public CustomUserDetails(UserEntity user) {
         this.id = user.getUserId();
         this.email = user.getEmail();
         this.password = user.getPassword();
@@ -29,6 +29,6 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public String getUsername() {
-        return email;              // We are treating email as a username
-    } 
+        return email; // We are treating email as a username
+    }
 }
