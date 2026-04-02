@@ -255,13 +255,11 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 ---
 
-## 👨‍💻 Author
+## 👤 Author
 
-**Sitesh Kumar**
-Software Development Engineer | Java | Spring Boot |
+**Sitesh Kumar Bhandary**
+Backend Developer | Java | Spring Boot
 
----
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub and feel free to fork & contribute!
+* GitHub: https://github.com/sitesh-kumar-bhandary
+* Linkedin : https://www.linkedin.com/in/sitesh-kumar-bhandary/
+* LeetCode : https://leetcode.com/u/_sitesh_kumar/
